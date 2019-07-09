@@ -1,4 +1,4 @@
-package com.vusachov.javapath.com.vusachov.javapath.urlshortener;
+package com.vusachov.javapath.urlshortener.hashgenerator;
 
 public class StringHashGenerator implements URLHashGenerator {
 
