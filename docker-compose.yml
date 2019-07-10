@@ -1,0 +1,14 @@
+version: '2'
+services:
+  postgresql:
+    container_name: postgresql
+    image: postgres:9.6-alpine
+    restart: on-failure
+    environment:
+      POSTGRES_USER: jp_user
+      POSTGRES_PASSWORD: jp_pass
+      POSTGRES_DB: jp_db
+    volumes:
+    - "/postgresql/data:/var/lib/postgresql/data"
+    ports:
+    - 5432:5432
