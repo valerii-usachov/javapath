@@ -5,6 +5,7 @@ import com.vusachov.javapath.urlshortener.action.ConvertCommand;
 import com.vusachov.javapath.urlshortener.db.ConnectionManager;
 import com.vusachov.javapath.urlshortener.storage.DbURLStorage;
 import com.vusachov.javapath.urlshortener.storage.URLStorage;
+import com.vusachov.javapath.urlshortener.storage.repository.SqlUrlsRepository;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,10 +19,7 @@ public class Main {
     private static String baseURL = getProperty("baseURL");
 
     public static void main(String[] args) {
-        ConnectionManager connectionManager = new ConnectionManager(getProps());
-        URLStorage urlStorage = new DbURLStorage(connectionManager.getConnection());
-
-        URLConverter converter = new URLConverter(baseURL, urlStorage);
+        URLConverter converter = new URLConverter(baseURL, getStorage());
 
         Scanner in = new Scanner(System.in);
         String commandStr = in.nextLine();
@@ -43,6 +41,13 @@ public class Main {
 
             commandStr = in.nextLine();
         } while (!commandStr.isEmpty());
+    }
+
+    private static URLStorage getStorage() {
+        ConnectionManager connectionManager = new ConnectionManager(getProps());
+        SqlUrlsRepository repository = new SqlUrlsRepository(connectionManager.getConnection());
+
+        return new DbURLStorage(repository);
     }
 
     private static String getProperty(String propName) throws IllegalArgumentException {

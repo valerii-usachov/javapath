@@ -17,7 +17,6 @@ public class ConnectionManager {
         final String dbPass = props.getProperty("db_pass");
 
         try {
-
             connection = DriverManager.getConnection(dbHost + "/" + dbName, dbUser, dbPass);
         } catch (SQLException e) {
             throw new RuntimeException("Cannot connect to db: " + e.getMessage(), e);
