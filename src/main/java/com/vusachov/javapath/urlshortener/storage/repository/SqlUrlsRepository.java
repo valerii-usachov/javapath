@@ -1,9 +1,6 @@
 package com.vusachov.javapath.urlshortener.storage.repository;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class SqlUrlsRepository {
 
@@ -22,10 +19,11 @@ public class SqlUrlsRepository {
 
     public String getUrlByHash(String hash) {
         try {
-            Statement statement = connection.createStatement();
+            String sqlQuery = String.format("SELECT url FROM %s WHERE hash = ?", tableName);
+            PreparedStatement statement = connection.prepareStatement(sqlQuery);
+            statement.setString(1, hash);
 
-            String sqlQuery = String.format("SELECT url FROM %s WHERE hash = '%s'", tableName, hash);
-            ResultSet resultSet = statement.executeQuery(sqlQuery);
+            ResultSet resultSet = statement.executeQuery();
 
             if (!resultSet.next()) {
                 return null;
@@ -42,15 +40,16 @@ public class SqlUrlsRepository {
 
     public void saveUrl(String hash, String url) {
         try {
-            Statement statement = connection.createStatement();
-
             String sqlQuery = String.format(
-                    "INSERT INTO %s (hash, url) VALUES ('%s', '%s') ON CONFLICT (hash) DO NOTHING",
-                    tableName,
-                    hash,
-                    url
+                    "INSERT INTO %s (hash, url) VALUES (?, ?) ON CONFLICT (hash) DO NOTHING",
+                    tableName
             );
-            statement.executeUpdate(sqlQuery);
+
+            PreparedStatement statement = connection.prepareStatement(sqlQuery);
+            statement.setString(1, hash);
+            statement.setString(2, url);
+
+            statement.executeUpdate();
 
         } catch (SQLException e) {
             System.out.println("Failed to  execute query: " + e.getMessage());
