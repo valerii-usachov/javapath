@@ -2,24 +2,19 @@ package com.vusachov.javapath;
 
 import com.vusachov.javapath.urlshortener.*;
 import com.vusachov.javapath.urlshortener.action.ConvertCommand;
-import com.vusachov.javapath.urlshortener.db.ConnectionManager;
-import com.vusachov.javapath.urlshortener.storage.DbURLStorage;
-import com.vusachov.javapath.urlshortener.storage.URLStorage;
-import com.vusachov.javapath.urlshortener.storage.repository.SqlUrlsRepository;
+import com.vusachov.javapath.urlshortener.repository.RepositoryFactory;
+import com.vusachov.javapath.urlshortener.repository.URLRepository;
+import com.vusachov.javapath.urlshortener.repository.URLRepositoryType;
+import com.vusachov.javapath.urlshortener.storage.StorageService;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Properties;
 import java.util.Scanner;
 
 public class Main {
 
-    private static String baseURL = getProperty("baseURL");
+    private static String baseURL = Config.getProperty("baseURL");
 
     public static void main(String[] args) {
-        URLConverter converter = new URLConverter(baseURL, getStorage());
+        URLConverter converter = new URLConverter(baseURL, getStorageService());
 
         Scanner in = new Scanner(System.in);
         String commandStr = in.nextLine();
@@ -34,7 +29,6 @@ public class Main {
                 continue;
             }
 
-
             String resultURL = converter.convert(command.getAction(), command.getUrl());
 
             System.out.println("Result URL: " + resultURL);
@@ -43,35 +37,9 @@ public class Main {
         } while (!commandStr.isEmpty());
     }
 
-    private static URLStorage getStorage() {
-        ConnectionManager connectionManager = new ConnectionManager(getConfigProperties());
-        SqlUrlsRepository repository = new SqlUrlsRepository(connectionManager.getConnection());
+    private static StorageService getStorageService() {
+        URLRepository repository = RepositoryFactory.getRepository(URLRepositoryType.DB);
 
-        return new DbURLStorage(repository);
-    }
-
-    private static String getProperty(String propName) throws IllegalArgumentException {
-        Properties props = getConfigProperties();
-
-        String prop = props.getProperty(propName);
-
-        if (prop == null) {
-            throw new IllegalArgumentException(String.format("Unknown property `%s`", propName));
-        }
-
-        return prop;
-    }
-
-    private static Properties getConfigProperties() {
-        Properties props = new Properties();
-
-        try (InputStream in = Files.newInputStream(Paths.get("config.properties"))) {
-            props.load(in);
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        return props;
+        return new StorageService(repository);
     }
 }

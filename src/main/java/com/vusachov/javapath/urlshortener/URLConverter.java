@@ -3,8 +3,7 @@ package com.vusachov.javapath.urlshortener;
 import com.vusachov.javapath.urlshortener.action.ConvertAction;
 import com.vusachov.javapath.urlshortener.hashgenerator.MD5HashGenerator;
 import com.vusachov.javapath.urlshortener.hashgenerator.URLHashGenerator;
-import com.vusachov.javapath.urlshortener.storage.InMemoryURLStorage;
-import com.vusachov.javapath.urlshortener.storage.URLStorage;
+import com.vusachov.javapath.urlshortener.storage.StorageService;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,15 +12,15 @@ public class URLConverter implements URLShortener {
 
     private String baseURL;
 
-    private URLStorage storage;
+    private StorageService storage;
 
     private URLHashGenerator hashGenerator;
 
     public URLConverter(String baseURL) {
-        this(baseURL, new InMemoryURLStorage());
+        this(baseURL, new StorageService());
     }
 
-    public URLConverter(String baseURL, URLStorage storage) {
+    public URLConverter(String baseURL, StorageService storage) {
         this(baseURL, storage, new MD5HashGenerator());
     }
 
@@ -30,7 +29,7 @@ public class URLConverter implements URLShortener {
         this.hashGenerator = hashGenerator;
     }
 
-    public URLConverter(String baseURL, URLStorage storage, URLHashGenerator hashGenerator) {
+    public URLConverter(String baseURL, StorageService storage, URLHashGenerator hashGenerator) {
         this.baseURL = baseURL;
         this.storage = storage;
         this.hashGenerator = hashGenerator;

@@ -7,24 +7,33 @@ import java.util.Properties;
 
 public class ConnectionManager {
 
+    private final String dbHost;
+    private final String dbName;
+    private final String dbUser;
+    private final String dbPass;
+
     private Connection connection;
 
     public ConnectionManager(Properties props) {
+        dbHost = props.getProperty("db_host");
+        dbName = props.getProperty("db_name");
+        dbUser = props.getProperty("db_user");
+        dbPass = props.getProperty("db_pass");
+    }
 
-        final String dbHost = props.getProperty("db_host");
-        final String dbName = props.getProperty("db_name");
-        final String dbUser = props.getProperty("db_user");
-        final String dbPass = props.getProperty("db_pass");
+    public Connection getConnection() {
+        if (connection == null) {
+            initConnection();
+        }
 
+        return connection;
+    }
+
+    private void initConnection() {
         try {
             connection = DriverManager.getConnection(dbHost + "/" + dbName, dbUser, dbPass);
         } catch (SQLException e) {
             throw new RuntimeException("Cannot connect to db: " + e.getMessage(), e);
         }
-    }
-
-    public Connection getConnection() {
-
-        return connection;
     }
 }

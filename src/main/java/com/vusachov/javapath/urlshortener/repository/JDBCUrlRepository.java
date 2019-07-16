@@ -1,23 +1,29 @@
-package com.vusachov.javapath.urlshortener.storage.repository;
+package com.vusachov.javapath.urlshortener.repository;
 
-import java.sql.*;
+import com.vusachov.javapath.urlshortener.repository.exception.URLRepositoryException;
 
-public class SqlUrlsRepository {
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class JDBCUrlRepository implements URLRepository {
 
     private final Connection connection;
 
     private final String tableName;
 
-    public SqlUrlsRepository(Connection connection) {
+    public JDBCUrlRepository(Connection connection) {
         this(connection, "urls");
     }
 
-    public SqlUrlsRepository(Connection connection, String tableName) {
+    public JDBCUrlRepository(Connection connection, String tableName) {
         this.connection = connection;
         this.tableName = tableName;
     }
 
-    public String getUrlByHash(String hash) {
+    @Override
+    public String get(String hash) throws URLRepositoryException {
         try {
             String sqlQuery = String.format("SELECT url FROM %s WHERE hash = ?", tableName);
             PreparedStatement statement = connection.prepareStatement(sqlQuery);
@@ -32,13 +38,12 @@ public class SqlUrlsRepository {
             return resultSet.getString("url");
 
         } catch (SQLException e) {
-            System.out.println("Failed to execute query: " + e.getMessage());
+            throw new URLRepositoryException("Failed to execute query", e);
         }
-
-        return null;
     }
 
-    public void saveUrl(String hash, String url) {
+    @Override
+    public void save(String hash, String url) throws URLRepositoryException {
         try {
             String sqlQuery = String.format(
                     "INSERT INTO %s (hash, url) VALUES (?, ?) ON CONFLICT (hash) DO NOTHING",
@@ -52,7 +57,7 @@ public class SqlUrlsRepository {
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("Failed to  execute query: " + e.getMessage());
+            throw new URLRepositoryException("Failed to execute query", e);
         }
     }
 }

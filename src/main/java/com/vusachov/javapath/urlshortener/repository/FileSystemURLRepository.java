@@ -1,25 +1,29 @@
-package com.vusachov.javapath.urlshortener.storage;
+package com.vusachov.javapath.urlshortener.repository;
 
-import java.io.*;
+import com.vusachov.javapath.urlshortener.repository.exception.URLRepositoryException;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Scanner;
 
-public class FileURLStorage implements URLStorage {
+public class FileSystemURLRepository implements URLRepository {
 
     private final String separator = " ";
     private Path filePath;
 
-    public FileURLStorage() {
+    public FileSystemURLRepository() {
         this("urls.txt");
     }
 
-    public FileURLStorage(String fileName) {
+    public FileSystemURLRepository(String fileName) {
         filePath = Paths.get(fileName);
     }
 
     @Override
-    public void put(String hash, String url) {
+    public void save(String hash, String url) throws URLRepositoryException {
 
         String existingUrl = get(hash);
         if (existingUrl != null) {
@@ -32,19 +36,19 @@ public class FileURLStorage implements URLStorage {
             String[] record = {hash + separator + url};
             Files.write(filePath, Arrays.asList(record), StandardCharsets.UTF_8, openOption);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            throw new URLRepositoryException(e);
         }
     }
 
     @Override
-    public String get(String hash) {
+    public String get(String hash) throws URLRepositoryException {
 
         Scanner scanner;
 
         try {
             scanner = new Scanner(new File(filePath.toString()));
         } catch (FileNotFoundException e) {
-            return null;
+            throw new URLRepositoryException(e);
         }
 
         while (scanner.hasNextLine()) {
