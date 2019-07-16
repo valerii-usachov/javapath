@@ -44,14 +44,14 @@ public class Main {
     }
 
     private static URLStorage getStorage() {
-        ConnectionManager connectionManager = new ConnectionManager(getProps());
+        ConnectionManager connectionManager = new ConnectionManager(getConfigProperties());
         SqlUrlsRepository repository = new SqlUrlsRepository(connectionManager.getConnection());
 
         return new DbURLStorage(repository);
     }
 
     private static String getProperty(String propName) throws IllegalArgumentException {
-        Properties props = getProps();
+        Properties props = getConfigProperties();
 
         String prop = props.getProperty(propName);
 
@@ -62,11 +62,11 @@ public class Main {
         return prop;
     }
 
-    private static Properties getProps() {
+    private static Properties getConfigProperties() {
         Properties props = new Properties();
 
-        try (InputStream in = Files.newInputStream(Paths.get("props.xml"))) {
-            props.loadFromXML(in);
+        try (InputStream in = Files.newInputStream(Paths.get("config.properties"))) {
+            props.load(in);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
