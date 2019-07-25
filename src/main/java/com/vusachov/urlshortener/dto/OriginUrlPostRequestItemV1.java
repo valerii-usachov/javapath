@@ -2,15 +2,18 @@ package com.vusachov.urlshortener.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class OriginUrlPost {
+import javax.validation.constraints.NotNull;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class OriginUrlPostRequestItemV1 {
+
+    @NotNull
     private String originUrl;
 
-    public OriginUrlPost() {
+    public OriginUrlPostRequestItemV1() {
     }
 
-    public OriginUrlPost(String originUrl) {
+    public OriginUrlPostRequestItemV1(String originUrl) {
         this.originUrl = originUrl;
     }
 

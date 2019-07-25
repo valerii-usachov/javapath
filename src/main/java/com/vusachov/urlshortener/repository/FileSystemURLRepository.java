@@ -7,6 +7,8 @@ import java.io.FileNotFoundException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class FileSystemURLRepository implements URLRepository {
@@ -62,6 +64,29 @@ public class FileSystemURLRepository implements URLRepository {
         }
 
         return null;
+    }
+
+    @Override
+    public Map<String, String> getAll() throws URLRepositoryException {
+        Scanner scanner;
+
+        try {
+            scanner = new Scanner(new File(filePath.toString()));
+        } catch (FileNotFoundException e) {
+            throw new URLRepositoryException(e);
+        }
+
+        HashMap<String, String> all = new HashMap<>();
+
+        while (scanner.hasNextLine()) {
+            String[] hashUrl = scanner.nextLine().split(separator);
+            String hash = hashUrl[0];
+            String url = hashUrl[1];
+
+            all.put(hash, url);
+        }
+
+        return all;
     }
 
     @Override

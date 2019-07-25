@@ -1,11 +1,11 @@
 package com.vusachov.urlshortener.dto;
 
-public class OriginUrlGet {
+public class OriginUrlGetResponseItemV1 {
 
     private final String hash;
     private final String originUrl;
 
-    public OriginUrlGet(String hash, String originUrl) {
+    public OriginUrlGetResponseItemV1(String hash, String originUrl) {
         this.hash = hash;
         this.originUrl = originUrl;
     }

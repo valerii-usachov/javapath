@@ -1,16 +1,19 @@
 package com.vusachov.urlshortener.repository;
 
 import com.vusachov.urlshortener.repository.exception.URLRepositoryException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
+@Repository
 public class JDBCUrlRepository implements URLRepository {
 
     private final Connection connection;
 
+    @Autowired
     JDBCUrlRepository(Connection connection) {
         this.connection = connection;
     }
@@ -29,6 +32,25 @@ public class JDBCUrlRepository implements URLRepository {
             }
 
             return resultSet.getString("url");
+
+        } catch (SQLException e) {
+            throw new URLRepositoryException("Failed to execute query", e);
+        }
+    }
+
+    @Override
+    public Map<String, String> getAll() throws URLRepositoryException {
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT hash, url FROM urls");
+
+            HashMap<String, String> result = new HashMap<>();
+
+            while (resultSet.next()) {
+                result.put(resultSet.getString("hash"), resultSet.getString("url"));
+            }
+
+            return result;
 
         } catch (SQLException e) {
             throw new URLRepositoryException("Failed to execute query", e);

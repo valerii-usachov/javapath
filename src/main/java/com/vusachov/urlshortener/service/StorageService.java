@@ -1,49 +1,14 @@
 package com.vusachov.urlshortener.service;
 
-import com.vusachov.urlshortener.repository.InMemoryURLRepository;
-import com.vusachov.urlshortener.repository.URLRepository;
-import com.vusachov.urlshortener.repository.exception.URLRepositoryException;
+import java.util.Map;
 
-public class StorageService {
+public interface StorageService {
 
-    private URLRepository repository;
+    void put(String hash, String url);
 
-    public StorageService() {
-        this(new InMemoryURLRepository());
-    }
+    String get(String hash);
 
-    public StorageService(URLRepository repository) {
-        this.repository = repository;
-    }
+    Map<String, String> getAll();
 
-    public void put(String hash, String url) {
-        try {
-            repository.save(hash, url);
-        } catch (URLRepositoryException e) {
-            //TODO log instead print
-            System.out.println("Error occurred: " + e.getMessage());
-        }
-    }
-
-    public String get(String hash) {
-        try {
-            return repository.get(hash);
-        } catch (URLRepositoryException e) {
-            //TODO log instead print
-            System.out.println("Error occurred: " + e.getMessage());
-        }
-
-        return null;
-    }
-
-    public boolean delete(String hash) {
-        try {
-            return repository.delete(hash);
-        } catch (URLRepositoryException e) {
-            //TODO log instead print
-            System.out.println("Error occurred: " + e.getMessage());
-        }
-
-        return false;
-    }
+    boolean delete(String hash);
 }

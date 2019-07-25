@@ -28,7 +28,7 @@ public class ConvertCommand {
         Matcher matcher = pattern.matcher(commandStr);
 
         if (!matcher.matches()) {
-            throw new IllegalArgumentException("Invalid command format. `[S|U] OriginUrlGet`");
+            throw new IllegalArgumentException("Invalid command format. `[S|U] OriginUrl`");
         }
 
         return new ConvertCommand(matcher.group(1), matcher.group(2));

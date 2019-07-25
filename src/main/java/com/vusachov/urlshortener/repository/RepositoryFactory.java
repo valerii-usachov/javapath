@@ -1,11 +1,16 @@
 package com.vusachov.urlshortener.repository;
 
-import com.vusachov.urlshortener.Config;
 import com.vusachov.urlshortener.db.ConnectionManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class RepositoryFactory {
 
-    public static URLRepository getRepository(URLRepositoryType type) {
+    @Autowired
+    private ConnectionManager connectionManager;
+
+    public URLRepository getRepository(URLRepositoryType type) {
 
         URLRepository repository;
 
@@ -14,12 +19,6 @@ public class RepositoryFactory {
                 repository = new FileSystemURLRepository();
                 break;
             case DB:
-                ConnectionManager connectionManager = new ConnectionManager(
-                        Config.getProperty("db_url"),
-                        Config.getProperty("db_user"),
-                        Config.getProperty("db_pass")
-                );
-
                 repository = new JDBCUrlRepository(connectionManager.getConnection());
                 break;
             case InMemory:

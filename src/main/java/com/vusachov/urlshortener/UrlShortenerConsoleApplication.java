@@ -1,19 +1,22 @@
 package com.vusachov.urlshortener;
 
 import com.vusachov.urlshortener.action.ConvertCommand;
-import com.vusachov.urlshortener.repository.RepositoryFactory;
-import com.vusachov.urlshortener.repository.URLRepository;
-import com.vusachov.urlshortener.repository.URLRepositoryType;
 import com.vusachov.urlshortener.service.StorageService;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.Scanner;
 
 public class UrlShortenerConsoleApplication {
 
-    private static String baseURL = Config.getProperty("baseURL");
-
     public static void main(String[] args) {
-        URLConverter converter = new URLConverter(baseURL, getStorageService());
+
+        ApplicationContext appContext = new AnnotationConfigApplicationContext("com.vusachov");
+
+        StorageService storageService = appContext.getBean("urlStorageService", StorageService.class);
+        String baseUrl = appContext.getEnvironment().getProperty("base_url", String.class);
+
+        URLConverter converter = new URLConverter(baseUrl, storageService);
 
         Scanner in = new Scanner(System.in);
         String commandStr = in.nextLine();
@@ -34,11 +37,5 @@ public class UrlShortenerConsoleApplication {
 
             commandStr = in.nextLine();
         } while (!commandStr.isEmpty());
-    }
-
-    private static StorageService getStorageService() {
-        URLRepository repository = RepositoryFactory.getRepository(URLRepositoryType.DB);
-
-        return new StorageService(repository);
     }
 }

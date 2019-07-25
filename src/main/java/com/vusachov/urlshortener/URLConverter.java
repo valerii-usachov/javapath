@@ -4,34 +4,30 @@ import com.vusachov.urlshortener.action.ConvertAction;
 import com.vusachov.urlshortener.hashgenerator.MD5HashGenerator;
 import com.vusachov.urlshortener.hashgenerator.URLHashGenerator;
 import com.vusachov.urlshortener.service.StorageService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Service
 public class URLConverter implements URLShortener {
 
-    private String baseURL;
+    private String baseUrl;
 
-    private StorageService storage;
+    private StorageService storageService;
 
     private URLHashGenerator hashGenerator;
 
-    public URLConverter(String baseURL) {
-        this(baseURL, new StorageService());
+    @Autowired
+    public URLConverter(@Value("${base_url}") String baseUrl, StorageService storageService) {
+        this(baseUrl, storageService, new MD5HashGenerator());
     }
 
-    public URLConverter(String baseURL, StorageService storage) {
-        this(baseURL, storage, new MD5HashGenerator());
-    }
-
-    public URLConverter(String baseURL, URLHashGenerator hashGenerator) {
-        this(baseURL);
-        this.hashGenerator = hashGenerator;
-    }
-
-    public URLConverter(String baseURL, StorageService storage, URLHashGenerator hashGenerator) {
-        this.baseURL = baseURL;
-        this.storage = storage;
+    public URLConverter(String baseURL, StorageService storageService, URLHashGenerator hashGenerator) {
+        this.baseUrl = baseURL;
+        this.storageService = storageService;
         this.hashGenerator = hashGenerator;
     }
 
@@ -49,7 +45,7 @@ public class URLConverter implements URLShortener {
     @Override
     public String getHashFromOriginUrl(String originURL) {
         String hash = hashGenerator.getHash(originURL);
-        storage.put(hash, originURL);
+        storageService.put(hash, originURL);
 
         return hash;
     }
@@ -57,19 +53,19 @@ public class URLConverter implements URLShortener {
     @Override
     public String shorten(String originURL) {
         String hash = hashGenerator.getHash(originURL);
-        storage.put(hash, originURL);
+        storageService.put(hash, originURL);
 
-        return baseURL + '/' + hash;
+        return baseUrl + '/' + hash;
     }
 
     @Override
     public String getOriginUrlByHash(String hash) {
-        return storage.get(hash);
+        return storageService.get(hash);
     }
 
     @Override
     public String deshorten(String shortURL) {
-        String patternStr = escapeRE(baseURL + "/") + "(.+)";
+        String patternStr = escapeRE(baseUrl + "/") + "(.+)";
         Pattern pattern = Pattern.compile(patternStr);
 
         Matcher matcher = pattern.matcher(shortURL);
@@ -80,7 +76,12 @@ public class URLConverter implements URLShortener {
 
         String hash = matcher.group(1);
 
-        return storage.get(hash);
+        return storageService.get(hash);
+    }
+
+    @Override
+    public boolean delete(String hash) {
+        return storageService.delete(hash);
     }
 
     private static String escapeRE(String str) {

@@ -18,4 +18,5 @@ public interface URLShortener {
      */
     String deshorten(String shortURL);
 
+    boolean delete(String hash);
 }

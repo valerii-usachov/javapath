@@ -1,35 +1,30 @@
 package com.vusachov.urlshortener.controller;
 
-import com.vusachov.urlshortener.Config;
-import com.vusachov.urlshortener.URLConverter;
+import com.vusachov.urlshortener.URLShortener;
 import com.vusachov.urlshortener.controller.exception.ResourceNotFoundException;
-import com.vusachov.urlshortener.dto.OriginUrlGet;
-import com.vusachov.urlshortener.dto.OriginUrlPost;
-import com.vusachov.urlshortener.repository.RepositoryFactory;
-import com.vusachov.urlshortener.repository.URLRepository;
-import com.vusachov.urlshortener.repository.URLRepositoryType;
+import com.vusachov.urlshortener.dto.OriginUrlGetResponseItemV1;
+import com.vusachov.urlshortener.dto.OriginUrlPostRequestItemV1;
 import com.vusachov.urlshortener.service.StorageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/hash")
 public class ApiHashController {
 
-    private URLConverter urlConverter;
+    @Autowired
+    private URLShortener urlConverter;
+
+    @Autowired
     private StorageService storageService;
 
-    {
-        String baseUrl = Config.getProperty("baseURL");
-        URLRepository repository = RepositoryFactory.getRepository(URLRepositoryType.DB);
-        storageService = new StorageService(repository);
-        urlConverter = new URLConverter(baseUrl, storageService);
-    }
-
     @GetMapping(value = "/{hash}", produces = "application/json")
-    public OriginUrlGet get(@PathVariable(value = "hash") String hash) {
+    public OriginUrlGetResponseItemV1 get(@PathVariable(value = "hash") String hash) {
 
         String originURL = urlConverter.getOriginUrlByHash(hash);
 
@@ -37,36 +32,31 @@ public class ApiHashController {
             throw new ResourceNotFoundException();
         }
 
-        return new OriginUrlGet(hash, originURL);
+        return new OriginUrlGetResponseItemV1(hash, originURL);
     }
 
     @GetMapping(value = "", produces = "application/json")
-    public List<OriginUrlGet> listOf2() {
+    public List<OriginUrlGetResponseItemV1> listAll() {
 
-        String hash1 = "11c15918e86e2bc43a98d4ac988afdb2";
-        String hash2 = "468cbe815d5fb6d2d78118d83ccc6d2d";
+        Map<String, String> allUrl = storageService.getAll();
+        List<OriginUrlGetResponseItemV1> list = new ArrayList<>();
 
-        String originURL1 = urlConverter.getOriginUrlByHash(hash1);
-        String originURL2 = urlConverter.getOriginUrlByHash(hash2);
-
-        List<OriginUrlGet> list = new ArrayList<>();
-        list.add(new OriginUrlGet(hash1, originURL1));
-        list.add(new OriginUrlGet(hash2, originURL2));
+        allUrl.forEach((hash, originURL) -> list.add(new OriginUrlGetResponseItemV1(hash, originURL)));
 
         return list;
     }
 
     @PostMapping(value = "/", consumes = "application/json")
-    public OriginUrlGet create(@RequestBody OriginUrlPost originUrlPost) {
+    public OriginUrlGetResponseItemV1 create(@Valid @RequestBody OriginUrlPostRequestItemV1 originUrlPost) {
 
         String originURL = originUrlPost.getOriginUrl();
         String hash = urlConverter.getHashFromOriginUrl(originURL);
 
-        return new OriginUrlGet(hash, originURL);
+        return new OriginUrlGetResponseItemV1(hash, originURL);
     }
 
     @DeleteMapping(value = "/{hash}")
-    public OriginUrlGet delete(@PathVariable(value = "hash") String hash) {
+    public OriginUrlGetResponseItemV1 delete(@PathVariable(value = "hash") String hash) {
 
         String originURL = urlConverter.getOriginUrlByHash(hash);
 
@@ -74,8 +64,8 @@ public class ApiHashController {
             throw new ResourceNotFoundException();
         }
 
-        storageService.delete(hash);
+        urlConverter.delete(hash);
 
-        return new OriginUrlGet(hash, originURL);
+        return new OriginUrlGetResponseItemV1(hash, originURL);
     }
 }

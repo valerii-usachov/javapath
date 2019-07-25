@@ -7,18 +7,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-public class StorageServiceTest {
+public class UrlStorageServiceTest {
 
     private static final String HASH = "someHash";
     private static final String ORIGIN_URL = "https://java.com/";
 
     private URLRepository repoMock;
-    private StorageService storageService;
+    private UrlStorageService storageService;
 
     @Before
     public void before() {
         repoMock = Mockito.mock(URLRepository.class);
-        storageService = new StorageService(repoMock);
+        storageService = new UrlStorageService(repoMock);
     }
 
     @Test

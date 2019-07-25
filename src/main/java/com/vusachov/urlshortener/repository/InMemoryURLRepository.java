@@ -18,6 +18,11 @@ public class InMemoryURLRepository implements URLRepository {
     }
 
     @Override
+    public Map<String, String> getAll() {
+        return new HashMap<>(shortenURLs);
+    }
+
+    @Override
     public boolean delete(String hash) {
 
         String originUrl = get(hash);
