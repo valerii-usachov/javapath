@@ -87,4 +87,24 @@ public class JDBCUrlRepository implements URLRepository {
             throw new URLRepositoryException("Failed to execute query", e);
         }
     }
+
+    @Override
+    public String getHashByOriginUrl(String originUrl) throws URLRepositoryException {
+        try {
+            String sqlQuery = "SELECT hash FROM urls WHERE url = ?";
+            PreparedStatement statement = connection.prepareStatement(sqlQuery);
+            statement.setString(1, originUrl);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            if (!resultSet.next()) {
+                return null;
+            }
+
+            return resultSet.getString("hash");
+
+        } catch (SQLException e) {
+            throw new URLRepositoryException("Failed to execute query", e);
+        }
+    }
 }

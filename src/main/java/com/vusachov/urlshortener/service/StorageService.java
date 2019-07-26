@@ -11,4 +11,6 @@ public interface StorageService {
     Map<String, String> getAll();
 
     boolean delete(String hash);
+
+    boolean isUnique(String originUrl);
 }

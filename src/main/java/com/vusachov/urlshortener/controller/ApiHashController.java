@@ -46,7 +46,7 @@ public class ApiHashController {
         return list;
     }
 
-    @PostMapping(value = "/", consumes = "application/json")
+    @PostMapping(value = "", consumes = "application/json")
     public OriginUrlGetResponseItemV1 create(@Valid @RequestBody OriginUrlPostRequestItemV1 originUrlPost) {
 
         String originURL = originUrlPost.getOriginUrl();

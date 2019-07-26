@@ -63,4 +63,15 @@ public class UrlStorageService implements StorageService {
 
         return false;
     }
+
+    public boolean isUnique(String originUrl) {
+        try {
+            return repository.getHashByOriginUrl(originUrl) == null;
+        } catch (URLRepositoryException e) {
+            //TODO log instead print
+            System.out.println("Error occurred: " + e.getMessage());
+        }
+
+        return true;
+    }
 }

@@ -40,4 +40,8 @@ public interface URLRepository {
      * @throws URLRepositoryException Cannot read
      */
     boolean delete(String hash) throws URLRepositoryException;
+
+    default String getHashByOriginUrl(String originUrl) throws URLRepositoryException {
+        return null;
+    }
 }
