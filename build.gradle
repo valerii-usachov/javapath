@@ -1,12 +1,6 @@
 plugins {
-    // Apply the java plugin to add support for Java
-    id 'java'
-
-    // Apply the application plugin to add support for building a CLI application
-    id 'application'
-
-    //Spring
     id 'org.springframework.boot' version '2.1.6.RELEASE'
+    id 'java'
     id 'war'
 }
 
@@ -17,7 +11,6 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 repositories {
-    jcenter()
     mavenCentral()
 }
 
@@ -29,17 +22,11 @@ dependencies {
 
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
+    compileOnly 'org.projectlombok:lombok:1.18.8'
+    annotationProcessor 'org.projectlombok:lombok:1.18.8'
+
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-all:1.10.19'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-}
-
-application {
-    //Define the main class for the application
-    mainClassName = 'com.vusachov.urlshortener.UrlShortenerWebApplication'
-}
-
-run {
-    standardInput = System.in
 }

@@ -1,7 +1,6 @@
 package com.vusachov.urlshortener.controller;
 
 import com.vusachov.urlshortener.URLShortener;
-import com.vusachov.urlshortener.controller.exception.ResourceNotFoundException;
 import com.vusachov.urlshortener.dto.OriginUrlGetResponseItemV1;
 import com.vusachov.urlshortener.dto.OriginUrlPostRequestItemV1;
 import com.vusachov.urlshortener.service.StorageService;
@@ -27,10 +26,6 @@ public class ApiHashController {
     public OriginUrlGetResponseItemV1 get(@PathVariable(value = "hash") String hash) {
 
         String originURL = urlConverter.getOriginUrlByHash(hash);
-
-        if (originURL == null) {
-            throw new ResourceNotFoundException();
-        }
 
         return new OriginUrlGetResponseItemV1(hash, originURL);
     }
@@ -59,10 +54,6 @@ public class ApiHashController {
     public OriginUrlGetResponseItemV1 delete(@PathVariable(value = "hash") String hash) {
 
         String originURL = urlConverter.getOriginUrlByHash(hash);
-
-        if (originURL == null) {
-            throw new ResourceNotFoundException();
-        }
 
         urlConverter.delete(hash);
 

@@ -1,5 +1,7 @@
 package com.vusachov.urlshortener;
 
+import com.vusachov.urlshortener.controller.exception.ResourceNotFoundException;
+
 public interface URLShortener {
 
     String getHashFromOriginUrl(String originURL);
@@ -10,7 +12,7 @@ public interface URLShortener {
      */
     String shorten(String originURL);
 
-    String getOriginUrlByHash(String originUrl);
+    String getOriginUrlByHash(String originUrl) throws ResourceNotFoundException;
 
     /**
      * @param shortURL Short URL

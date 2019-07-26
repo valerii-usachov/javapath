@@ -2,6 +2,7 @@ package com.vusachov.urlshortener.service;
 
 import com.vusachov.urlshortener.repository.URLRepository;
 import com.vusachov.urlshortener.repository.exception.URLRepositoryException;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,8 @@ public class UrlStorageService implements StorageService {
 
     private URLRepository repository;
 
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(UrlStorageService.class);
+
     @Autowired
     public UrlStorageService(URLRepository repository) {
         this.repository = repository;
@@ -23,8 +26,7 @@ public class UrlStorageService implements StorageService {
         try {
             repository.save(hash, url);
         } catch (URLRepositoryException e) {
-            //TODO log instead print
-            System.out.println("Error occurred: " + e.getMessage());
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -33,8 +35,7 @@ public class UrlStorageService implements StorageService {
         try {
             return repository.get(hash);
         } catch (URLRepositoryException e) {
-            //TODO log instead print
-            System.out.println("Error occurred: " + e.getMessage());
+            log.error(e.getMessage(), e);
         }
 
         return null;
@@ -45,8 +46,7 @@ public class UrlStorageService implements StorageService {
         try {
             return repository.getAll();
         } catch (URLRepositoryException e) {
-            //TODO log instead print
-            System.out.println("Error occurred: " + e.getMessage());
+            log.error(e.getMessage(), e);
         }
 
         return new HashMap<>();
@@ -57,19 +57,18 @@ public class UrlStorageService implements StorageService {
         try {
             return repository.delete(hash);
         } catch (URLRepositoryException e) {
-            //TODO log instead print
-            System.out.println("Error occurred: " + e.getMessage());
+            log.error(e.getMessage(), e);
         }
 
         return false;
     }
 
+    @Override
     public boolean isUnique(String originUrl) {
         try {
             return repository.getHashByOriginUrl(originUrl) == null;
         } catch (URLRepositoryException e) {
-            //TODO log instead print
-            System.out.println("Error occurred: " + e.getMessage());
+            log.error(e.getMessage(), e);
         }
 
         return true;

@@ -1,6 +1,6 @@
 package com.vusachov.urlshortener;
 
-import com.vusachov.urlshortener.action.ConvertAction;
+import com.vusachov.urlshortener.controller.exception.ResourceNotFoundException;
 import com.vusachov.urlshortener.hashgenerator.MD5HashGenerator;
 import com.vusachov.urlshortener.hashgenerator.URLHashGenerator;
 import com.vusachov.urlshortener.service.StorageService;
@@ -31,17 +31,6 @@ public class URLConverter implements URLShortener {
         this.hashGenerator = hashGenerator;
     }
 
-    public String convert(ConvertAction action, String url) {
-
-        if (action == ConvertAction.SHORTEN) {
-            return shorten(url);
-        } else if (action == ConvertAction.DESHORTEN) {
-            return deshorten(url);
-        } else {
-            return null;
-        }
-    }
-
     @Override
     public String getHashFromOriginUrl(String originURL) {
         String hash = hashGenerator.getHash(originURL);
@@ -59,8 +48,14 @@ public class URLConverter implements URLShortener {
     }
 
     @Override
-    public String getOriginUrlByHash(String hash) {
-        return storageService.get(hash);
+    public String getOriginUrlByHash(String hash) throws ResourceNotFoundException {
+        String originUrl = storageService.get(hash);
+
+        if (originUrl == null) {
+            throw new ResourceNotFoundException();
+        }
+
+        return originUrl;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.vusachov.urlshortener.controller;
 
 import com.vusachov.urlshortener.URLConverter;
-import com.vusachov.urlshortener.controller.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,10 +17,6 @@ public class UrlController {
     public RedirectView redirectByHash(@PathVariable(value = "hash") String hash) {
 
         String originURL = urlConverter.getOriginUrlByHash(hash);
-
-        if (originURL == null) {
-            throw new ResourceNotFoundException();
-        }
 
         return new RedirectView(originURL);
     }
