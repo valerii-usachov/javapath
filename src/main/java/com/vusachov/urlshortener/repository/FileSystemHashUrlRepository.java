@@ -1,65 +1,69 @@
 package com.vusachov.urlshortener.repository;
 
-import com.vusachov.urlshortener.repository.exception.URLRepositoryException;
+import com.vusachov.urlshortener.entity.HashUrl;
+import com.vusachov.urlshortener.repository.exception.HashUrlRepositoryException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Scanner;
 
-public class FileSystemURLRepository implements URLRepository {
+public class FileSystemHashUrlRepository implements HashUrlRepository {
 
     private final String separator = " ";
     private Path filePath;
 
-    public FileSystemURLRepository() {
+    public FileSystemHashUrlRepository() {
         this("urls.txt");
     }
 
-    public FileSystemURLRepository(String fileName) {
+    public FileSystemHashUrlRepository(String fileName) {
         filePath = Paths.get(fileName);
     }
 
     @Override
-    public void save(String hash, String url) throws URLRepositoryException {
+    public HashUrl save(HashUrl hashUrl) throws HashUrlRepositoryException {
 
-        String existingUrl = get(hash);
+        HashUrl existingUrl = findOne(hashUrl.getHash());
+
         if (existingUrl != null) {
-            return;
+            return hashUrl;
         }
 
         OpenOption openOption = Files.exists(filePath) ? StandardOpenOption.APPEND : StandardOpenOption.CREATE_NEW;
 
         try {
-            String[] record = {hash + separator + url};
+            String[] record = {hashUrl.getHash() + separator + hashUrl.getUrl()};
             Files.write(filePath, Arrays.asList(record), StandardCharsets.UTF_8, openOption);
         } catch (Exception e) {
-            throw new URLRepositoryException(e);
+            throw new HashUrlRepositoryException(e);
         }
+
+        return hashUrl;
     }
 
     @Override
-    public String get(String hash) throws URLRepositoryException {
+    public HashUrl findOne(String hash) throws HashUrlRepositoryException {
 
         Scanner scanner;
 
         try {
             scanner = new Scanner(new File(filePath.toString()));
         } catch (FileNotFoundException e) {
-            throw new URLRepositoryException(e);
+            throw new HashUrlRepositoryException(e);
         }
 
         while (scanner.hasNextLine()) {
             String[] hashUrl = scanner.nextLine().split(separator);
             String urlHash = hashUrl[0];
-            String url = hashUrl[1];
+            String originUrl = hashUrl[1];
 
             if (hash.equals(urlHash)) {
-                return url;
+                return new HashUrl(hash, originUrl);
             }
         }
 
@@ -67,30 +71,30 @@ public class FileSystemURLRepository implements URLRepository {
     }
 
     @Override
-    public Map<String, String> getAll() throws URLRepositoryException {
+    public List<HashUrl> findAll() throws HashUrlRepositoryException {
         Scanner scanner;
 
         try {
             scanner = new Scanner(new File(filePath.toString()));
         } catch (FileNotFoundException e) {
-            throw new URLRepositoryException(e);
+            throw new HashUrlRepositoryException(e);
         }
 
-        HashMap<String, String> all = new HashMap<>();
+        ArrayList<HashUrl> all = new ArrayList<>();
 
         while (scanner.hasNextLine()) {
             String[] hashUrl = scanner.nextLine().split(separator);
             String hash = hashUrl[0];
             String url = hashUrl[1];
 
-            all.put(hash, url);
+            all.add(new HashUrl(hash, url));
         }
 
         return all;
     }
 
     @Override
-    public boolean delete(String hash) throws URLRepositoryException {
-        throw new URLRepositoryException("Unsupported operation: delete");
+    public boolean delete(String hash) throws HashUrlRepositoryException {
+        throw new HashUrlRepositoryException("Unsupported operation: delete");
     }
 }

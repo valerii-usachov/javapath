@@ -1,6 +1,8 @@
 package com.vusachov.urlshortener.service;
 
-import java.util.Map;
+import com.vusachov.urlshortener.entity.HashUrl;
+
+import java.util.List;
 
 public interface StorageService {
 
@@ -8,7 +10,7 @@ public interface StorageService {
 
     String get(String hash);
 
-    Map<String, String> getAll();
+    List<HashUrl> getAll();
 
     boolean delete(String hash);
 
