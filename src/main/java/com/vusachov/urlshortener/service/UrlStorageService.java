@@ -2,7 +2,7 @@ package com.vusachov.urlshortener.service;
 
 import com.vusachov.urlshortener.entity.HashUrl;
 import com.vusachov.urlshortener.repository.HashUrlRepository;
-import com.vusachov.urlshortener.repository.exception.URLRepositoryException;
+import com.vusachov.urlshortener.repository.exception.HashUrlRepositoryException;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class UrlStorageService implements StorageService {
     public void put(String hash, String url) {
         try {
             repository.save(new HashUrl(hash, url));
-        } catch (URLRepositoryException e) {
+        } catch (HashUrlRepositoryException e) {
             log.error(e.getMessage(), e);
         }
     }
@@ -36,7 +36,7 @@ public class UrlStorageService implements StorageService {
         try {
             HashUrl hashUrl = repository.findOne(hash);
             return hashUrl != null ? hashUrl.getUrl() : null;
-        } catch (URLRepositoryException e) {
+        } catch (HashUrlRepositoryException e) {
             log.info(e.getMessage());
         }
 
@@ -47,7 +47,7 @@ public class UrlStorageService implements StorageService {
     public List<HashUrl> getAll() {
         try {
             return repository.findAll();
-        } catch (URLRepositoryException e) {
+        } catch (HashUrlRepositoryException e) {
             log.error(e.getMessage(), e);
         }
 
@@ -58,7 +58,7 @@ public class UrlStorageService implements StorageService {
     public boolean delete(String hash) {
         try {
             return repository.delete(hash);
-        } catch (URLRepositoryException e) {
+        } catch (HashUrlRepositoryException e) {
             log.error(e.getMessage(), e);
         }
 
@@ -69,7 +69,7 @@ public class UrlStorageService implements StorageService {
     public boolean isUnique(String originUrl) {
         try {
             return repository.findOneByOriginUrl(originUrl) == null;
-        } catch (URLRepositoryException e) {
+        } catch (HashUrlRepositoryException e) {
             log.error(e.getMessage(), e);
         }
 

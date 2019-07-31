@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/hash")
@@ -33,12 +33,11 @@ public class ApiHashController {
     @GetMapping(value = "", produces = "application/json")
     public List<OriginUrlGetResponseItemV1> listAll() {
 
-        List<HashUrl> allUrl = storageService.getAll();
-        List<OriginUrlGetResponseItemV1> list = new ArrayList<>();
+        List<HashUrl> allUrls = storageService.getAll();
 
-        allUrl.forEach((hashOriginURL) -> list.add(
-                new OriginUrlGetResponseItemV1(hashOriginURL.getHash(), hashOriginURL.getUrl()))
-        );
+        List<OriginUrlGetResponseItemV1> list = allUrls.stream()
+                .map(hashUrl -> new OriginUrlGetResponseItemV1(hashUrl.getHash(), hashUrl.getUrl()))
+                .collect(Collectors.toList());
 
         return list;
     }

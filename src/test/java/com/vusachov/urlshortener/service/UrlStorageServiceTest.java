@@ -2,7 +2,7 @@ package com.vusachov.urlshortener.service;
 
 import com.vusachov.urlshortener.entity.HashUrl;
 import com.vusachov.urlshortener.repository.HashUrlRepository;
-import com.vusachov.urlshortener.repository.exception.URLRepositoryException;
+import com.vusachov.urlshortener.repository.exception.HashUrlRepositoryException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +23,7 @@ public class UrlStorageServiceTest {
     }
 
     @Test
-    public void returnsOriginalUrlByHashIfItIsStored() throws URLRepositoryException {
+    public void returnsOriginalUrlByHashIfItIsStored() throws HashUrlRepositoryException {
         Mockito.when(repoMock.findOne(HASH)).thenReturn(new HashUrl(HASH, ORIGIN_URL));
 
         storageService.put(HASH, ORIGIN_URL);
@@ -32,7 +32,7 @@ public class UrlStorageServiceTest {
     }
 
     @Test
-    public void returnsNullByHashIfItIsNotStored() throws URLRepositoryException {
+    public void returnsNullByHashIfItIsNotStored() throws HashUrlRepositoryException {
         Mockito.when(repoMock.findOne("someNonInStorageHash")).thenReturn(null);
 
         Assert.assertNull(storageService.get("someNonInStorageHash"));

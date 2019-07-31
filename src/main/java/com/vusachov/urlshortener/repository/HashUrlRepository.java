@@ -1,7 +1,7 @@
 package com.vusachov.urlshortener.repository;
 
 import com.vusachov.urlshortener.entity.HashUrl;
-import com.vusachov.urlshortener.repository.exception.URLRepositoryException;
+import com.vusachov.urlshortener.repository.exception.HashUrlRepositoryException;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -16,15 +16,15 @@ public interface HashUrlRepository {
         );
     };
 
-    HashUrl findOne(String hash) throws URLRepositoryException;
+    HashUrl findOne(String hash) throws HashUrlRepositoryException;
 
-    List<HashUrl> findAll() throws URLRepositoryException;
+    List<HashUrl> findAll() throws HashUrlRepositoryException;
 
-    HashUrl save(HashUrl hashUrl) throws URLRepositoryException;
+    HashUrl save(HashUrl hashUrl) throws HashUrlRepositoryException;
 
-    boolean delete(String hash) throws URLRepositoryException;
+    boolean delete(String hash) throws HashUrlRepositoryException;
 
-    default HashUrl findOneByOriginUrl(String originUrl) throws URLRepositoryException {
+    default HashUrl findOneByOriginUrl(String originUrl) throws HashUrlRepositoryException {
         return null;
     }
 }

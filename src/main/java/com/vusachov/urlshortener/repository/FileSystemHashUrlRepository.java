@@ -1,7 +1,7 @@
 package com.vusachov.urlshortener.repository;
 
 import com.vusachov.urlshortener.entity.HashUrl;
-import com.vusachov.urlshortener.repository.exception.URLRepositoryException;
+import com.vusachov.urlshortener.repository.exception.HashUrlRepositoryException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,7 +26,7 @@ public class FileSystemHashUrlRepository implements HashUrlRepository {
     }
 
     @Override
-    public HashUrl save(HashUrl hashUrl) throws URLRepositoryException {
+    public HashUrl save(HashUrl hashUrl) throws HashUrlRepositoryException {
 
         HashUrl existingUrl = findOne(hashUrl.getHash());
 
@@ -40,21 +40,21 @@ public class FileSystemHashUrlRepository implements HashUrlRepository {
             String[] record = {hashUrl.getHash() + separator + hashUrl.getUrl()};
             Files.write(filePath, Arrays.asList(record), StandardCharsets.UTF_8, openOption);
         } catch (Exception e) {
-            throw new URLRepositoryException(e);
+            throw new HashUrlRepositoryException(e);
         }
 
         return hashUrl;
     }
 
     @Override
-    public HashUrl findOne(String hash) throws URLRepositoryException {
+    public HashUrl findOne(String hash) throws HashUrlRepositoryException {
 
         Scanner scanner;
 
         try {
             scanner = new Scanner(new File(filePath.toString()));
         } catch (FileNotFoundException e) {
-            throw new URLRepositoryException(e);
+            throw new HashUrlRepositoryException(e);
         }
 
         while (scanner.hasNextLine()) {
@@ -71,13 +71,13 @@ public class FileSystemHashUrlRepository implements HashUrlRepository {
     }
 
     @Override
-    public List<HashUrl> findAll() throws URLRepositoryException {
+    public List<HashUrl> findAll() throws HashUrlRepositoryException {
         Scanner scanner;
 
         try {
             scanner = new Scanner(new File(filePath.toString()));
         } catch (FileNotFoundException e) {
-            throw new URLRepositoryException(e);
+            throw new HashUrlRepositoryException(e);
         }
 
         ArrayList<HashUrl> all = new ArrayList<>();
@@ -94,7 +94,7 @@ public class FileSystemHashUrlRepository implements HashUrlRepository {
     }
 
     @Override
-    public boolean delete(String hash) throws URLRepositoryException {
-        throw new URLRepositoryException("Unsupported operation: delete");
+    public boolean delete(String hash) throws HashUrlRepositoryException {
+        throw new HashUrlRepositoryException("Unsupported operation: delete");
     }
 }
