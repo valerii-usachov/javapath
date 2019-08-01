@@ -1,19 +1,24 @@
 package com.vusachov.urlshortener.domain;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(unique = true, nullable = false)
     private String username;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     private AccountType accountType;
 
     @Column
@@ -29,7 +34,13 @@ public class User {
     private Byte[] avatar;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private Set<Url> urls;
+    private Set<Hash> hashes;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     public Long getId() {
         return id;
@@ -45,6 +56,14 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public AccountType getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(AccountType accountType) {
+        this.accountType = accountType;
     }
 
     public String getFirstName() {
@@ -63,11 +82,27 @@ public class User {
         this.lastName = lastName;
     }
 
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
     public Byte[] getAvatar() {
         return avatar;
     }
 
     public void setAvatar(Byte[] avatar) {
         this.avatar = avatar;
+    }
+
+    public Set<Hash> getHashes() {
+        return hashes;
+    }
+
+    public void setHashes(Set<Hash> hashes) {
+        this.hashes = hashes;
     }
 }

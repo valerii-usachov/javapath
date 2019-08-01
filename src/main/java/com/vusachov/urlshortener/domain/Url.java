@@ -9,26 +9,15 @@ public class Url {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String hash;
-
-    @Column(length = 2083)
+    @Column(length = 2083, unique = true, nullable = false)
     private String url;
 
-    @ManyToOne
-    private User user;
-
-    public Url(String hash, String url) {
-        this.hash = hash;
-        this.url = url;
+    public Long getId() {
+        return id;
     }
 
-    public String getHash() {
-        return hash;
-    }
-
-    public void setHash(String hash) {
-        this.hash = hash;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUrl() {
@@ -37,13 +26,5 @@ public class Url {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

@@ -1,13 +1,14 @@
 package com.vusachov.urlshortener.domain;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
 public class AccountType {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Short id;
+    private String id;
 
     @Column
     private String name;
