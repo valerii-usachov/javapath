@@ -1,4 +1,4 @@
-package com.vusachov.urlshortener.repositorues;
+package com.vusachov.urlshortener.repositories;
 
 import com.vusachov.urlshortener.domain.AccountType;
 import org.springframework.data.repository.CrudRepository;

@@ -5,6 +5,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -14,8 +15,11 @@ public class Hash {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Url url;
+
+    @Column(nullable = false)
+    private String hash;
 
     @ManyToOne
     private User user;
@@ -25,13 +29,21 @@ public class Hash {
             joinColumns = @JoinColumn(name = "hash_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    private Set<Tag> tags;
+    private Set<Tag> tags = new HashSet<>();
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public Hash() {
+    }
+
+    public Hash(Url url, String hash) {
+        this.url = url;
+        this.hash = hash;
+    }
 
     public Long getId() {
         return id;
@@ -47,6 +59,14 @@ public class Hash {
 
     public void setUrl(Url url) {
         this.url = url;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
     }
 
     public User getUser() {

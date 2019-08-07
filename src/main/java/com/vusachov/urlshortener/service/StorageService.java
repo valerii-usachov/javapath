@@ -1,18 +1,24 @@
 package com.vusachov.urlshortener.service;
 
-import com.vusachov.urlshortener.entity.HashUrl;
+import com.vusachov.urlshortener.domain.Hash;
+import com.vusachov.urlshortener.domain.Url;
+import com.vusachov.urlshortener.exception.ResourceNotFoundException;
 
 import java.util.List;
 
 public interface StorageService {
 
-    void put(String hash, String url);
+    Hash create(String url, String hashCode);
 
-    String get(String hash);
+    Hash save(Hash hash);
 
-    List<HashUrl> getAll();
+    Hash get(String hashCode) throws ResourceNotFoundException;
 
-    boolean delete(String hash);
+    List<Hash> getAll();
 
-    boolean isUnique(String originUrl);
+    boolean delete(Hash hash);
+
+    boolean isUnique(String hashCode);
+
+    Url findOrCreateUrl(String url);
 }

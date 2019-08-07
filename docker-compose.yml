@@ -9,6 +9,18 @@ services:
       POSTGRES_PASSWORD: jp_pass
       POSTGRES_DB: jp_db
     volumes:
-    - "/postgresql/data:/var/lib/postgresql/data"
+      - "/postgresql/data:/var/lib/postgresql/data"
     ports:
-    - 5432:5432
+      - 5432:5432
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    restart: on-failure
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "pgadmin@pgadmin.org"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+    links:
+      - postgresql
+    ports:
+      - 5050:80

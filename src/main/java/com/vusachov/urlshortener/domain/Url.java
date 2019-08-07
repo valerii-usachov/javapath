@@ -12,6 +12,13 @@ public class Url {
     @Column(length = 2083, unique = true, nullable = false)
     private String url;
 
+    public Url() {
+    }
+
+    public Url(String url) {
+        this.url = url;
+    }
+
     public Long getId() {
         return id;
     }

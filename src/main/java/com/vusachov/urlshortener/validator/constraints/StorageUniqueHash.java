@@ -1,6 +1,6 @@
 package com.vusachov.urlshortener.validator.constraints;
 
-import com.vusachov.urlshortener.validator.constraintvalidators.StorageUniqueURLValidator;
+import com.vusachov.urlshortener.validator.constraintvalidators.StorageUniqueHashValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -14,9 +14,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = {StorageUniqueURLValidator.class})
-public @interface StorageUniqueURL {
-    String message() default "Url already exists";
+@Constraint(validatedBy = {StorageUniqueHashValidator.class})
+public @interface StorageUniqueHash {
+    String message() default "Hash already exists";
 
     Class<?>[] groups() default {};
 
