@@ -11,10 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class HashUrlStorageService implements StorageService {
+public class HashUrlStorageService implements HashUrlStorage {
 
     private final HashRepository hashRepository;
     private final UrlRepository urlRepository;
@@ -48,13 +47,8 @@ public class HashUrlStorageService implements StorageService {
 
     @Override
     public Hash get(String hashCode) {
-        Optional<Hash> hashUrl = hashRepository.findByHash(hashCode);
-
-        if (!hashUrl.isPresent()) {
-            throw new ResourceNotFoundException();
-        }
-
-        return hashUrl.get();
+        return hashRepository.findByHash(hashCode)
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override

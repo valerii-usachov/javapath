@@ -6,7 +6,7 @@ import com.vusachov.urlshortener.exception.ResourceNotFoundException;
 
 import java.util.List;
 
-public interface StorageService {
+public interface HashUrlStorage {
 
     Hash create(String url, String hashCode);
 
