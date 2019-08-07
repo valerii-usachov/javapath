@@ -5,27 +5,20 @@ import com.vusachov.urlshortener.domain.Url;
 import com.vusachov.urlshortener.exception.ResourceNotFoundException;
 import com.vusachov.urlshortener.repositories.HashRepository;
 import com.vusachov.urlshortener.repositories.UrlRepository;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
+@Slf4j
 public class HashUrlStorageService implements HashUrlStorage {
 
     private final HashRepository hashRepository;
     private final UrlRepository urlRepository;
-
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(HashUrlStorageService.class);
-
-    @Autowired
-    public HashUrlStorageService(HashRepository hashRepository, UrlRepository urlRepository) {
-
-        this.hashRepository = hashRepository;
-        this.urlRepository = urlRepository;
-    }
 
     @Override
     public Hash create(String originURL, String hashCode) {

@@ -1,8 +1,11 @@
 package com.vusachov.urlshortener.domain;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 @Entity
+@Data
 public class Url {
 
     @Id
@@ -16,22 +19,6 @@ public class Url {
     }
 
     public Url(String url) {
-        this.url = url;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
         this.url = url;
     }
 }

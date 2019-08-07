@@ -1,5 +1,6 @@
 package com.vusachov.urlshortener.domain;
 
+import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -7,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
+@Data
 public class Tag {
 
     @Id
@@ -21,28 +23,4 @@ public class Tag {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<Hash> getHashes() {
-        return hashes;
-    }
-
-    public void setHashes(Set<Hash> hashes) {
-        this.hashes = hashes;
-    }
 }

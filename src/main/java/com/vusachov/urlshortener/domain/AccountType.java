@@ -1,10 +1,13 @@
 package com.vusachov.urlshortener.domain;
 
+import lombok.Data;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
+@Data
 public class AccountType {
 
     @Id
@@ -15,20 +18,4 @@ public class AccountType {
 
     @Column
     private int urlExpPeriod = 0;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getUrlExpPeriod() {
-        return urlExpPeriod;
-    }
-
-    public void setUrlExpPeriod(int urlExpPeriod) {
-        this.urlExpPeriod = urlExpPeriod;
-    }
 }
