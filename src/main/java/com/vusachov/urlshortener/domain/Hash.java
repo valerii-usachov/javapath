@@ -18,7 +18,7 @@ public class Hash {
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Url url;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String hash;
 
     @ManyToOne
