@@ -8,6 +8,7 @@ import com.vusachov.urlshortener.repositories.UrlRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ public class HashUrlStorageService implements HashUrlStorage {
     private final UrlRepository urlRepository;
 
     @Override
+    @Transactional
     public Hash create(String originURL, String hashCode) {
         Url url = this.findOrCreateUrl(originURL);
 
@@ -33,9 +35,7 @@ public class HashUrlStorageService implements HashUrlStorage {
 
     @Override
     public Hash save(Hash hash) {
-        hashRepository.save(hash);
-
-        return hash;
+        return hashRepository.save(hash);
     }
 
     @Override
