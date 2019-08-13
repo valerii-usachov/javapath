@@ -12,20 +12,20 @@ import org.mockito.Mockito;
 
 import java.util.Optional;
 
-public class HashUrlStorageServiceTest {
+public class HashUrlServiceImplTest {
 
     private static final String HASH = "someHash";
     private static final String ORIGIN_URL = "https://java.com/";
 
     private HashRepository hashRepoMock;
     private UrlRepository urlRepoMock;
-    private HashUrlStorageService storageService;
+    private HashUrlServiceImpl storageService;
 
     @Before
     public void before() {
         hashRepoMock = Mockito.mock(HashRepository.class);
         urlRepoMock = Mockito.mock(UrlRepository.class);
-        storageService = new HashUrlStorageService(hashRepoMock, urlRepoMock);
+        storageService = new HashUrlServiceImpl(hashRepoMock, urlRepoMock);
     }
 
     @Test

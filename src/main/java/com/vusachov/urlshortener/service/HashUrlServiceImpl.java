@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class HashUrlStorageService implements HashUrlStorage {
+public class HashUrlServiceImpl implements HashUrlService {
 
     private final HashRepository hashRepository;
     private final UrlRepository urlRepository;

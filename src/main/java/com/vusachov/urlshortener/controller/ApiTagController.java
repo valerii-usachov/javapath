@@ -2,7 +2,8 @@ package com.vusachov.urlshortener.controller;
 
 import com.vusachov.urlshortener.domain.Tag;
 import com.vusachov.urlshortener.dto.TagGetResponseItemV1;
-import com.vusachov.urlshortener.service.TagStorage;
+import com.vusachov.urlshortener.service.TagService;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,24 +16,24 @@ import java.util.stream.Collectors;
 @RequestMapping("api/v1/tag")
 public class ApiTagController {
 
-    private TagStorage tagStorage;
+    private TagService tagService;
 
-    public ApiTagController(TagStorage tagStorage) {
-        this.tagStorage = tagStorage;
+    public ApiTagController(TagService tagService) {
+        this.tagService = tagService;
     }
 
-    @GetMapping(value = "/{id}", produces = "application/json")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public TagGetResponseItemV1 get(@PathVariable(value = "id") Long id) {
 
-        Tag tag = tagStorage.get(id);
+        Tag tag = tagService.get(id);
 
         return new TagGetResponseItemV1(tag);
     }
 
-    @GetMapping(value = "", produces = "application/json")
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<TagGetResponseItemV1> listAll() {
 
-        return tagStorage.getAll()
+        return tagService.getAll()
                 .stream()
                 .map(TagGetResponseItemV1::new)
                 .collect(Collectors.toList());

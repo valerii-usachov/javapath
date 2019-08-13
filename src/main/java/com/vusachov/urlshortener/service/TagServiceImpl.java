@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class TagStorageService implements TagStorage {
+public class TagServiceImpl implements TagService {
 
     private final TagRepository tagRepository;
 

@@ -5,7 +5,7 @@ import com.vusachov.urlshortener.exception.ResourceNotFoundException;
 
 import java.util.List;
 
-public interface TagStorage {
+public interface TagService {
 
     Tag get(Long id) throws ResourceNotFoundException;
 
