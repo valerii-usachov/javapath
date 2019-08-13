@@ -1,6 +1,6 @@
 package com.vusachov.urlshortener.dto;
 
-import com.vusachov.urlshortener.domain.Tag;
+import com.vusachov.urlshortener.entity.Tag;
 
 public class TagGetResponseItemV1 {
 

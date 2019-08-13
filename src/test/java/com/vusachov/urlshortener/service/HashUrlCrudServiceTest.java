@@ -1,7 +1,7 @@
 package com.vusachov.urlshortener.service;
 
-import com.vusachov.urlshortener.domain.Hash;
-import com.vusachov.urlshortener.domain.Url;
+import com.vusachov.urlshortener.entity.Hash;
+import com.vusachov.urlshortener.entity.Url;
 import com.vusachov.urlshortener.exception.ResourceNotFoundException;
 import com.vusachov.urlshortener.repositories.HashRepository;
 import com.vusachov.urlshortener.repositories.UrlRepository;
@@ -12,20 +12,20 @@ import org.mockito.Mockito;
 
 import java.util.Optional;
 
-public class HashUrlServiceImplTest {
+public class HashUrlCrudServiceTest {
 
     private static final String HASH = "someHash";
     private static final String ORIGIN_URL = "https://java.com/";
 
     private HashRepository hashRepoMock;
     private UrlRepository urlRepoMock;
-    private HashUrlServiceImpl storageService;
+    private HashUrlCrudService storageService;
 
     @Before
     public void before() {
         hashRepoMock = Mockito.mock(HashRepository.class);
         urlRepoMock = Mockito.mock(UrlRepository.class);
-        storageService = new HashUrlServiceImpl(hashRepoMock, urlRepoMock);
+        storageService = new HashUrlCrudService(hashRepoMock, urlRepoMock);
     }
 
     @Test

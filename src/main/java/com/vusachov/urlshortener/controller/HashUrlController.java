@@ -1,6 +1,6 @@
 package com.vusachov.urlshortener.controller;
 
-import com.vusachov.urlshortener.domain.Hash;
+import com.vusachov.urlshortener.entity.Hash;
 import com.vusachov.urlshortener.exception.ResourceNotFoundException;
 import com.vusachov.urlshortener.service.HashUrlService;
 import org.springframework.stereotype.Controller;

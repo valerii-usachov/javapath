@@ -1,6 +1,6 @@
 package com.vusachov.urlshortener.controller;
 
-import com.vusachov.urlshortener.domain.Hash;
+import com.vusachov.urlshortener.entity.Hash;
 import com.vusachov.urlshortener.dto.HashUrlDeleteResponseItemV1;
 import com.vusachov.urlshortener.dto.HashUrlGetResponseItemV1;
 import com.vusachov.urlshortener.dto.HashUrlPostRequestItemV1;

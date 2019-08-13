@@ -44,6 +44,7 @@ create table users
     last_name       varchar(255),
     updated_at      timestamp,
     username        varchar(255) not null,
+    password        varchar(255),
     account_type_id varchar(255),
     primary key (id)
 );

@@ -23,6 +23,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.apache.commons:commons-text:1.6'
 
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 

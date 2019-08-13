@@ -1,7 +1,7 @@
 package com.vusachov.urlshortener.service;
 
-import com.vusachov.urlshortener.domain.Hash;
-import com.vusachov.urlshortener.domain.Url;
+import com.vusachov.urlshortener.entity.Hash;
+import com.vusachov.urlshortener.entity.Url;
 import com.vusachov.urlshortener.exception.ResourceNotFoundException;
 
 import java.util.List;

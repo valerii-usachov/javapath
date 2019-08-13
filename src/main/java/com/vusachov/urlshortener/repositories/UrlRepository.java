@@ -1,6 +1,6 @@
 package com.vusachov.urlshortener.repositories;
 
-import com.vusachov.urlshortener.domain.Url;
+import com.vusachov.urlshortener.entity.Url;
 import org.springframework.data.repository.CrudRepository;
 
 import javax.annotation.Nullable;

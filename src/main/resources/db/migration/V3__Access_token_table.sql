@@ -1,0 +1,2 @@
+create table access_token (token varchar(255) not null, expires_on timestamp, user_id int8, primary key (token));
+alter table access_token add constraint FK35enf10xnmb70oiu2rk91nchy foreign key (user_id) references users;

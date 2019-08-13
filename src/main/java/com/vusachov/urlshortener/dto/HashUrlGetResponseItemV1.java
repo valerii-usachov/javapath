@@ -1,7 +1,7 @@
 package com.vusachov.urlshortener.dto;
 
-import com.vusachov.urlshortener.domain.Hash;
-import com.vusachov.urlshortener.domain.Tag;
+import com.vusachov.urlshortener.entity.Hash;
+import com.vusachov.urlshortener.entity.Tag;
 
 import java.util.Set;
 import java.util.stream.Collectors;

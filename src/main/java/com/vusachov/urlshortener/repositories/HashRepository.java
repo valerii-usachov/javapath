@@ -1,6 +1,6 @@
 package com.vusachov.urlshortener.repositories;
 
-import com.vusachov.urlshortener.domain.Hash;
+import com.vusachov.urlshortener.entity.Hash;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package com.vusachov.urlshortener.domain;
+package com.vusachov.urlshortener.entity;
 
 import lombok.Data;
 

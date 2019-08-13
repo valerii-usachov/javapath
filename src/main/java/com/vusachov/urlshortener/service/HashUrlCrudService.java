@@ -1,7 +1,7 @@
 package com.vusachov.urlshortener.service;
 
-import com.vusachov.urlshortener.domain.Hash;
-import com.vusachov.urlshortener.domain.Url;
+import com.vusachov.urlshortener.entity.Hash;
+import com.vusachov.urlshortener.entity.Url;
 import com.vusachov.urlshortener.exception.ResourceNotFoundException;
 import com.vusachov.urlshortener.repositories.HashRepository;
 import com.vusachov.urlshortener.repositories.UrlRepository;
@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class HashUrlServiceImpl implements HashUrlService {
+public class HashUrlCrudService implements HashUrlService {
 
     private final HashRepository hashRepository;
     private final UrlRepository urlRepository;
