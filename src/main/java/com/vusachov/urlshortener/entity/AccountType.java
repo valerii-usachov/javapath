@@ -10,6 +10,8 @@ import javax.persistence.Id;
 @Data
 public class AccountType {
 
+    public static final String DEFAULT_ID = "free";
+
     @Id
     private String id;
 

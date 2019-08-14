@@ -10,8 +10,6 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
@@ -33,16 +31,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final RequestMatcher PROTECTED_URLS = new NegatedRequestMatcher(PUBLIC_URLS);
 
-    private TokenAuthenticationProvider provider;
+    private TokenAuthenticationProvider tokenAuthProvider;
 
-    SecurityConfig(final TokenAuthenticationProvider provider) {
+    SecurityConfig(final TokenAuthenticationProvider tokenAuthProvider) {
         super();
-        this.provider = Objects.requireNonNull(provider);
+        this.tokenAuthProvider = Objects.requireNonNull(tokenAuthProvider);
     }
 
     @Override
-    protected void configure(final AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(provider);
+    protected void configure(final AuthenticationManagerBuilder authManagerBuilder) {
+        authManagerBuilder.authenticationProvider(tokenAuthProvider);
     }
 
     @Override
@@ -53,15 +51,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http
-                //.sessionManagement()
-                //.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                //.and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .exceptionHandling()
                 // this entry point handles when you request a protected page and you are not yet
                 // authenticated
                 .defaultAuthenticationEntryPointFor(forbiddenEntryPoint(), PROTECTED_URLS)
                 .and()
-                .authenticationProvider(provider)
+                .authenticationProvider(tokenAuthProvider)
                 .addFilterBefore(restAuthenticationFilter(), AnonymousAuthenticationFilter.class)
                 .authorizeRequests()
                 .requestMatchers(PROTECTED_URLS)
@@ -92,9 +90,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * Disable Spring boot automatic filter registration.
      */
     @Bean
-    FilterRegistrationBean disableAutoRegistration(final TokenAuthenticationFilter filter) {
-        final FilterRegistrationBean registration = new FilterRegistrationBean(filter);
+    FilterRegistrationBean<TokenAuthenticationFilter> disableAutoRegistration(final TokenAuthenticationFilter filter) {
+        final FilterRegistrationBean<TokenAuthenticationFilter> registration = new FilterRegistrationBean<>(filter);
         registration.setEnabled(false);
+
         return registration;
     }
 
@@ -102,33 +101,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     AuthenticationEntryPoint forbiddenEntryPoint() {
         return new HttpStatusEntryPoint(HttpStatus.FORBIDDEN);
     }
-
-    public PasswordEncoder encoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-   /* @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("apiUser").password(encoder().encode("userPass")).roles("USER");
-    }
-
-    @Bean
-    public PasswordEncoder encoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
-                .exceptionHandling()
-                .and()
-                .authorizeRequests()
-                .antMatchers("/api/**").authenticated()
-                .and()
-                .formLogin()
-                .and()
-                .logout();
-    }*/
 }

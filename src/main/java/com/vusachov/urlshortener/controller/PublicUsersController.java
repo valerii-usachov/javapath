@@ -1,5 +1,6 @@
 package com.vusachov.urlshortener.controller;
 
+import com.vusachov.urlshortener.dto.NewUserDto;
 import com.vusachov.urlshortener.entity.User;
 import com.vusachov.urlshortener.service.UserAuthenticationService;
 import com.vusachov.urlshortener.service.UserService;
@@ -23,10 +24,10 @@ final class PublicUsersController {
     UserService userService;
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
-    String register(@RequestBody User user) {
-        userService.save(user);
+    String register(@RequestBody NewUserDto userDto) {
+        User user = userService.registerNewUserAccount(userDto);
 
-        return login(user.getUsername(), user.getPassword());
+        return login(user.getUsername(), userDto.getPassword());
     }
 
     @PostMapping("/login")
@@ -35,7 +36,7 @@ final class PublicUsersController {
             @RequestParam("password") final String password) {
 
         return authentication
-                .login(username, password)
+                .createAccessToken(username, password)
                 .orElseThrow(() -> new RuntimeException("Invalid login and/or password"));
     }
 }

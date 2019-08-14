@@ -3,7 +3,6 @@ package com.vusachov.urlshortener.security;
 import com.vusachov.urlshortener.service.UserAuthenticationService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
@@ -17,21 +16,25 @@ import java.util.Optional;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 final class TokenAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
-    @NonNull
-    UserAuthenticationService auth;
+
+    UserAuthenticationService accessTokenService;
 
     @Override
-    protected void additionalAuthenticationChecks(final UserDetails d, final UsernamePasswordAuthenticationToken auth) {
+    protected void additionalAuthenticationChecks(final UserDetails userDetails,
+                                                  final UsernamePasswordAuthenticationToken auth) {
         // Nothing to do
     }
 
     @Override
-    protected UserDetails retrieveUser(final String username, final UsernamePasswordAuthenticationToken authentication) {
-        final Object token = authentication.getCredentials();
-        return Optional
+    protected UserDetails retrieveUser(final String username, final UsernamePasswordAuthenticationToken authToken) {
+        final Object token = authToken.getCredentials();
+
+        String accessToken = Optional
                 .ofNullable(token)
                 .map(String::valueOf)
-                .flatMap(auth::findByToken)
-                .orElseThrow(() -> new UsernameNotFoundException("Cannot find user with authentication token=" + token));
+                .get();
+
+        return accessTokenService.findUserByAccessToken(accessToken)
+                .orElseThrow(() -> new UsernameNotFoundException("Cannot find user with access token=" + token));
     }
 }

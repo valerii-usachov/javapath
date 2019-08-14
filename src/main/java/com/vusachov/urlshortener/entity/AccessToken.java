@@ -3,7 +3,6 @@ package com.vusachov.urlshortener.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -21,8 +20,12 @@ public class AccessToken {
     @Id
     private String token;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private User user;
 
     private LocalDateTime expiresOn;
+
+    public boolean isExpired() {
+        return expiresOn.isBefore(LocalDateTime.now());
+    }
 }
