@@ -5,8 +5,8 @@ import com.vusachov.urlshortener.entity.User;
 import com.vusachov.urlshortener.repositories.AccessTokenRepository;
 import com.vusachov.urlshortener.repositories.UserRepository;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 final class AccessTokenService implements UserAuthenticationService {
 
     UserRepository userRepository;
@@ -24,6 +23,15 @@ final class AccessTokenService implements UserAuthenticationService {
     AccessTokenRepository accessTokenRepository;
 
     PasswordEncoder passwordEncoder;
+
+    public AccessTokenService(UserRepository userRepository, AccessTokenRepository accessTokenRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.accessTokenRepository = accessTokenRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Value("${security.access_token.ttl}")
+    Integer accessTokenTTL = 60;
 
     @Override
     public Optional<String> createAccessToken(final String username, final String password) {
@@ -37,7 +45,7 @@ final class AccessTokenService implements UserAuthenticationService {
         clearExpiredTokens(user.get());
 
         final String uuid = UUID.randomUUID().toString();
-        final LocalDateTime expiresOn = LocalDateTime.now().plusSeconds(5);
+        final LocalDateTime expiresOn = LocalDateTime.now().plusSeconds(accessTokenTTL);
 
         final AccessToken accessToken = new AccessToken(uuid, user.get(), expiresOn);
 

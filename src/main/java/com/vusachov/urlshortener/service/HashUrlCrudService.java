@@ -2,6 +2,7 @@ package com.vusachov.urlshortener.service;
 
 import com.vusachov.urlshortener.entity.Hash;
 import com.vusachov.urlshortener.entity.Url;
+import com.vusachov.urlshortener.entity.User;
 import com.vusachov.urlshortener.exception.ResourceNotFoundException;
 import com.vusachov.urlshortener.repositories.HashRepository;
 import com.vusachov.urlshortener.repositories.UrlRepository;
@@ -48,6 +49,14 @@ public class HashUrlCrudService implements HashUrlService {
     public List<Hash> getAll() {
         List<Hash> hashes = new ArrayList<>();
         hashRepository.findAll().iterator().forEachRemaining(hashes::add);
+
+        return hashes;
+    }
+
+    @Override
+    public List<Hash> getAllForUser(User user) {
+        List<Hash> hashes = new ArrayList<>();
+        hashRepository.findAllByUser(user).iterator().forEachRemaining(hashes::add);
 
         return hashes;
     }

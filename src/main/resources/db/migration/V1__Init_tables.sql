@@ -37,15 +37,16 @@ create table url
 create table users
 (
     id              bigserial    not null,
-    avatar          oid,
-    created_at      timestamp,
-    first_name      varchar(255),
-    gender          varchar(255),
-    last_name       varchar(255),
-    updated_at      timestamp,
     username        varchar(255) not null,
     password        varchar(255),
     account_type_id varchar(255),
+    role            varchar(255),
+    first_name      varchar(255),
+    last_name       varchar(255),
+    avatar          oid,
+    gender          varchar(255),
+    created_at      timestamp,
+    updated_at      timestamp,
     primary key (id)
 );
 alter table hash

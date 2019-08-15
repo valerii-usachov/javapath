@@ -1,5 +1,6 @@
 package com.vusachov.urlshortener.security;
 
+import com.vusachov.urlshortener.entity.UserRole;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +17,6 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
-import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.util.Objects;
@@ -25,11 +25,11 @@ import java.util.Objects;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private static final RequestMatcher PUBLIC_URLS = new OrRequestMatcher(
-            new AntPathRequestMatcher("/public/**")
-    );
+    private static final RequestMatcher PUBLIC_URLS = new AntPathRequestMatcher("/public/**");
 
     private static final RequestMatcher PROTECTED_URLS = new NegatedRequestMatcher(PUBLIC_URLS);
+
+    private static final RequestMatcher ADMIN_URLS = new AntPathRequestMatcher("/admin_api/**");
 
     private TokenAuthenticationProvider tokenAuthProvider;
 
@@ -62,8 +62,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationProvider(tokenAuthProvider)
                 .addFilterBefore(restAuthenticationFilter(), AnonymousAuthenticationFilter.class)
                 .authorizeRequests()
+                .requestMatchers(ADMIN_URLS)
+                .hasRole(UserRole.ADMIN.toString())
                 .requestMatchers(PROTECTED_URLS)
-                .authenticated()
+                .hasAnyRole(UserRole.USER.toString(), UserRole.ADMIN.toString())
                 .and()
                 .csrf().disable()
                 .formLogin().disable()
@@ -76,6 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         final TokenAuthenticationFilter filter = new TokenAuthenticationFilter(PROTECTED_URLS);
         filter.setAuthenticationManager(authenticationManager());
         filter.setAuthenticationSuccessHandler(successHandler());
+
         return filter;
     }
 
@@ -83,6 +86,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     SimpleUrlAuthenticationSuccessHandler successHandler() {
         final SimpleUrlAuthenticationSuccessHandler successHandler = new SimpleUrlAuthenticationSuccessHandler();
         successHandler.setRedirectStrategy(new NoRedirectStrategy());
+
         return successHandler;
     }
 
