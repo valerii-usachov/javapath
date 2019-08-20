@@ -1,6 +1,6 @@
 package com.vusachov.urlshortener.validator.constraintvalidators;
 
-import com.vusachov.urlshortener.service.HashUrlService;
+import com.vusachov.urlshortener.service.HashService;
 import com.vusachov.urlshortener.validator.constraints.StorageUniqueHash;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -9,11 +9,11 @@ import javax.validation.ConstraintValidatorContext;
 
 public class StorageUniqueHashValidator implements ConstraintValidator<StorageUniqueHash, String> {
 
-    private HashUrlService hashUrlService;
+    private HashService hashService;
 
     @Autowired
-    public StorageUniqueHashValidator(HashUrlService hashUrlService) {
-        this.hashUrlService = hashUrlService;
+    public StorageUniqueHashValidator(HashService hashService) {
+        this.hashService = hashService;
     }
 
     @Override
@@ -23,6 +23,6 @@ public class StorageUniqueHashValidator implements ConstraintValidator<StorageUn
             return true;
         }
 
-        return hashUrlService.isUnique(hash);
+        return hashService.isUnique(hash);
     }
 }
