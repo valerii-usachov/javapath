@@ -1,4 +1,4 @@
-package com.vusachov.urlshortener.domain;
+package com.vusachov.urlshortener.entity;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;

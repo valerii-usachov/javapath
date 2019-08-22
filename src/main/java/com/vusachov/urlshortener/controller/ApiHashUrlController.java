@@ -1,13 +1,15 @@
 package com.vusachov.urlshortener.controller;
 
-import com.vusachov.urlshortener.domain.Hash;
+import com.vusachov.urlshortener.entity.Hash;
 import com.vusachov.urlshortener.dto.HashUrlDeleteResponseItemV1;
 import com.vusachov.urlshortener.dto.HashUrlGetResponseItemV1;
 import com.vusachov.urlshortener.dto.HashUrlPostRequestItemV1;
+import com.vusachov.urlshortener.entity.User;
 import com.vusachov.urlshortener.exception.ResourceNotFoundException;
 import com.vusachov.urlshortener.hashgenerator.URLHashGenerator;
 import com.vusachov.urlshortener.service.HashUrlService;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -35,10 +37,10 @@ public class ApiHashUrlController {
         return new HashUrlGetResponseItemV1(hash);
     }
 
-    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<HashUrlGetResponseItemV1> listAll() {
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<HashUrlGetResponseItemV1> listAll(@AuthenticationPrincipal final User user) {
 
-        return hashUrlService.getAll()
+        return hashUrlService.getAllForUser(user)
                 .stream()
                 .map(HashUrlGetResponseItemV1::new)
                 .collect(Collectors.toList());

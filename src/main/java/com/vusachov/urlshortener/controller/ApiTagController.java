@@ -1,6 +1,6 @@
 package com.vusachov.urlshortener.controller;
 
-import com.vusachov.urlshortener.domain.Tag;
+import com.vusachov.urlshortener.entity.Tag;
 import com.vusachov.urlshortener.dto.TagGetResponseItemV1;
 import com.vusachov.urlshortener.service.TagService;
 import org.springframework.http.MediaType;

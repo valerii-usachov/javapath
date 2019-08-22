@@ -1,6 +1,6 @@
 package com.vusachov.urlshortener.service;
 
-import com.vusachov.urlshortener.domain.Tag;
+import com.vusachov.urlshortener.entity.Tag;
 import com.vusachov.urlshortener.exception.ResourceNotFoundException;
 import com.vusachov.urlshortener.repositories.TagRepository;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class TagServiceImpl implements TagService {
+public class TagCrudService implements TagService {
 
     private final TagRepository tagRepository;
 

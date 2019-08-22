@@ -1,4 +1,4 @@
-package com.vusachov.urlshortener.domain;
+package com.vusachov.urlshortener.entity;
 
 import lombok.Data;
 
@@ -9,6 +9,8 @@ import javax.persistence.Id;
 @Entity
 @Data
 public class AccountType {
+
+    public static final String DEFAULT_ID = "free";
 
     @Id
     private String id;

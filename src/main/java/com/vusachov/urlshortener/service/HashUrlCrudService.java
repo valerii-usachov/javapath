@@ -1,7 +1,8 @@
 package com.vusachov.urlshortener.service;
 
-import com.vusachov.urlshortener.domain.Hash;
-import com.vusachov.urlshortener.domain.Url;
+import com.vusachov.urlshortener.entity.Hash;
+import com.vusachov.urlshortener.entity.Url;
+import com.vusachov.urlshortener.entity.User;
 import com.vusachov.urlshortener.exception.ResourceNotFoundException;
 import com.vusachov.urlshortener.repositories.HashRepository;
 import com.vusachov.urlshortener.repositories.UrlRepository;
@@ -16,7 +17,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class HashUrlServiceImpl implements HashUrlService {
+public class HashUrlCrudService implements HashUrlService {
 
     private final HashRepository hashRepository;
     private final UrlRepository urlRepository;
@@ -48,6 +49,14 @@ public class HashUrlServiceImpl implements HashUrlService {
     public List<Hash> getAll() {
         List<Hash> hashes = new ArrayList<>();
         hashRepository.findAll().iterator().forEachRemaining(hashes::add);
+
+        return hashes;
+    }
+
+    @Override
+    public List<Hash> getAllForUser(User user) {
+        List<Hash> hashes = new ArrayList<>();
+        hashRepository.findAllByUser(user).iterator().forEachRemaining(hashes::add);
 
         return hashes;
     }
