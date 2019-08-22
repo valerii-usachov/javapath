@@ -4,11 +4,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @ComponentScan({"com.vusachov"})
 @PropertySource("classpath:application.properties")
+@EnableAsync
 public class AppConfig {
 
     @Bean

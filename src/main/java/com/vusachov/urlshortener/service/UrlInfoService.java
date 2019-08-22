@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UrlInfoService {
 
-    UrlHost createUrlHost(Url url, String ip, String type, String ispId, String ispName);
+    void createUrlHost(Url url, String ip, String type, String ispId, String ispName);
 
     List<UrlHost> getAllForUrl(Url url);
 }

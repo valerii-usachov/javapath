@@ -18,7 +18,7 @@ public class UrlInfoCrudService implements UrlInfoService {
     ISPRepository ispRepository;
 
     @Override
-    public UrlHost createUrlHost(Url url, String ip, String type, String ispId, String ispName) {
+    synchronized public void createUrlHost(Url url, String ip, String type, String ispId, String ispName) {
 
         ISP isp = ispRepository.findById(ispId).orElse(null);
 
@@ -30,7 +30,7 @@ public class UrlInfoCrudService implements UrlInfoService {
         urlHost.setIp(ip);
         urlHost.setType(type);
 
-        return urlHostRepository.save(urlHost);
+        urlHostRepository.save(urlHost);
     }
 
     @Override

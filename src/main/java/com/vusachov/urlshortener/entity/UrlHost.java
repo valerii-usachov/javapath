@@ -18,11 +18,11 @@ public class UrlHost {
     private Long id;
 
     @NonNull
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     private ISP isp;
 
     @NonNull
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     private Url url;
 
     private String ip;

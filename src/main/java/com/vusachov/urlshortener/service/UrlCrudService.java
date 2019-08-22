@@ -32,7 +32,7 @@ public class UrlCrudService implements UrlService {
         urlRepository.save(newUrl);
 
         applicationEventPublisher.publishEvent(
-                new UrlCreatedEvent(this, newUrl)
+                new UrlCreatedEvent(this, newUrl.getId())
         );
 
         return newUrl;
