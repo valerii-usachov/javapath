@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -18,7 +19,7 @@ final class PublicTestController {
     WhoHostsService whoHostsService;
 
     @GetMapping()
-    HostDetectionResponse test() {
-        return whoHostsService.getHostDetectionInfo("https://regex101.com/");
+    HostDetectionResponse test(@RequestParam("url") String url) {
+        return whoHostsService.getHostDetectionInfo(url);
     }
 }

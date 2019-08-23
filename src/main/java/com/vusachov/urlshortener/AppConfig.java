@@ -1,5 +1,6 @@
 package com.vusachov.urlshortener;
 
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 @ComponentScan({"com.vusachov"})
 @PropertySource("classpath:application.properties")
 @EnableAsync
+@EnableCaching
 public class AppConfig {
 
     @Bean

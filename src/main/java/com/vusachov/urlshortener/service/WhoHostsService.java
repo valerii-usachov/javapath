@@ -3,6 +3,7 @@ package com.vusachov.urlshortener.service;
 import com.vusachov.urlshortener.dto.whohosts.HostDetectionResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -31,6 +32,7 @@ public class WhoHostsService {
     }
 
     @Nullable
+    @Cacheable("hostInfo")
     public HostDetectionResponse getHostDetectionInfo(String url) {
         URI uri = uriBuilder().queryParam("url", url).build();
         HostDetectionResponse hostDetectionResponse = null;
