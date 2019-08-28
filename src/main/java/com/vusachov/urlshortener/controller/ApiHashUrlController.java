@@ -7,7 +7,7 @@ import com.vusachov.urlshortener.dto.HashUrlPostRequestItemV1;
 import com.vusachov.urlshortener.entity.User;
 import com.vusachov.urlshortener.exception.ResourceNotFoundException;
 import com.vusachov.urlshortener.hashgenerator.URLHashGenerator;
-import com.vusachov.urlshortener.service.HashUrlService;
+import com.vusachov.urlshortener.service.HashService;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -22,17 +22,17 @@ public class ApiHashUrlController {
 
     private URLHashGenerator urlHashGenerator;
 
-    private HashUrlService hashUrlService;
+    private HashService hashService;
 
-    public ApiHashUrlController(URLHashGenerator urlHashGenerator, HashUrlService hashUrlService) {
+    public ApiHashUrlController(URLHashGenerator urlHashGenerator, HashService hashService) {
         this.urlHashGenerator = urlHashGenerator;
-        this.hashUrlService = hashUrlService;
+        this.hashService = hashService;
     }
 
     @GetMapping(value = "/{hash}", produces = MediaType.APPLICATION_JSON_VALUE)
     public HashUrlGetResponseItemV1 get(@PathVariable(value = "hash") String hashCode) {
 
-        Hash hash = hashUrlService.get(hashCode);
+        Hash hash = hashService.get(hashCode);
 
         return new HashUrlGetResponseItemV1(hash);
     }
@@ -40,7 +40,7 @@ public class ApiHashUrlController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<HashUrlGetResponseItemV1> listAll(@AuthenticationPrincipal final User user) {
 
-        return hashUrlService.getAllForUser(user)
+        return hashService.getAllForUser(user)
                 .stream()
                 .map(HashUrlGetResponseItemV1::new)
                 .collect(Collectors.toList());
@@ -56,7 +56,7 @@ public class ApiHashUrlController {
             hashCode = urlHashGenerator.getHash(originURL);
         }
 
-        Hash hash = hashUrlService.create(originURL, hashCode);
+        Hash hash = hashService.create(originURL, hashCode);
 
         return new HashUrlGetResponseItemV1(hash);
     }
@@ -64,13 +64,13 @@ public class ApiHashUrlController {
     @DeleteMapping(value = "/{hash}")
     public HashUrlDeleteResponseItemV1 delete(@PathVariable(value = "hash") String hashCode) {
 
-        Hash hash = hashUrlService.get(hashCode);
+        Hash hash = hashService.get(hashCode);
 
         if (hash == null) {
             throw new ResourceNotFoundException();
         }
 
-        boolean result = hashUrlService.delete(hash);
+        boolean result = hashService.delete(hash);
 
         return new HashUrlDeleteResponseItemV1(result);
     }

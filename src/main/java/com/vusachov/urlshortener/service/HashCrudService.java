@@ -5,7 +5,6 @@ import com.vusachov.urlshortener.entity.Url;
 import com.vusachov.urlshortener.entity.User;
 import com.vusachov.urlshortener.exception.ResourceNotFoundException;
 import com.vusachov.urlshortener.repositories.HashRepository;
-import com.vusachov.urlshortener.repositories.UrlRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,15 +16,15 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class HashUrlCrudService implements HashUrlService {
+public class HashCrudService implements HashService {
 
     private final HashRepository hashRepository;
-    private final UrlRepository urlRepository;
+    private final UrlService urlInfoService;
 
     @Override
     @Transactional
     public Hash create(String originURL, String hashCode) {
-        Url url = this.findOrCreateUrl(originURL);
+        Url url = urlInfoService.findOrCreateUrl(originURL);
 
         Hash hash = new Hash(url, hashCode);
 
@@ -71,20 +70,5 @@ public class HashUrlCrudService implements HashUrlService {
     @Override
     public boolean isUnique(String hashCode) {
         return !hashRepository.findByHash(hashCode).isPresent();
-    }
-
-    @Override
-    public Url findOrCreateUrl(String url) {
-
-        Url existingUrl = urlRepository.findByUrl(url);
-
-        if (existingUrl != null) {
-            return existingUrl;
-        }
-
-        Url newUrl = new Url(url);
-        urlRepository.save(newUrl);
-
-        return newUrl;
     }
 }

@@ -11,6 +11,8 @@ public class MD5HashGenerator implements URLHashGenerator {
 
     @Override
     public String getHash(String url) {
+        url = url + getRandom();
+
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
 

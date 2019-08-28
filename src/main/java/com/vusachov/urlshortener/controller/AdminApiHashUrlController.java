@@ -1,7 +1,7 @@
 package com.vusachov.urlshortener.controller;
 
 import com.vusachov.urlshortener.dto.HashUrlGetResponseItemV1;
-import com.vusachov.urlshortener.service.HashUrlService;
+import com.vusachov.urlshortener.service.HashService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,16 +14,16 @@ import java.util.stream.Collectors;
 @RequestMapping("admin_api/v1/hash")
 public class AdminApiHashUrlController {
 
-    private HashUrlService hashUrlService;
+    private HashService hashService;
 
-    public AdminApiHashUrlController(HashUrlService hashUrlService) {
-        this.hashUrlService = hashUrlService;
+    public AdminApiHashUrlController(HashService hashService) {
+        this.hashService = hashService;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<HashUrlGetResponseItemV1> listAll() {
 
-        return hashUrlService.getAll()
+        return hashService.getAll()
                 .stream()
                 .map(HashUrlGetResponseItemV1::new)
                 .collect(Collectors.toList());

@@ -7,7 +7,7 @@ import com.vusachov.urlshortener.exception.ResourceNotFoundException;
 
 import java.util.List;
 
-public interface HashUrlService {
+public interface HashService {
 
     Hash create(String url, String hashCode);
 
@@ -22,6 +22,4 @@ public interface HashUrlService {
     boolean delete(Hash hash);
 
     boolean isUnique(String hashCode);
-
-    Url findOrCreateUrl(String url);
 }
